@@ -1,6 +1,6 @@
 <template>
     <div :class="!!border ? 'hy-tree border' : 'hy-tree'">
-        <tree-node v-for="node in nodeList" :key="node.nodeKey" :node="node" :activeKey="activeKey"></tree-node>
+        <tree-node v-for="node in nodeList" :key="node.nodeKey" :node="node" :rootTree="rootTree" :activeKey="activeKey" :renderContent="renderContent" ></tree-node>
         <div class="empty" v-if="nodeList.length < 1">暂无数据</div>
     </div>
 </template>
@@ -20,12 +20,15 @@ export default {
         data: { type: Array, default: () => [] },
         fieldNames: { type: Object, default: () => defaultFieldNames },
         defaultExpandAll: { type: Boolean, default: false },
-        checkedKeys: { type: Array, default: () => [] },
-        border: { type: Boolean, default: true }
+        defaultCheckedKeys: {type:Array,default:()=>[]},
+        border: { type: Boolean, default: true },
+        renderContent:Function
     },
     data() {
         return {
-            activeKey: null
+            activeKey: null,
+            checkedKeys: this.defaultCheckedKeys,
+            rootTree: this
         };
     },
     computed: {
@@ -52,8 +55,10 @@ export default {
             utils.setNodeChecked(nodePath, checked);
 
             // 更新checkedKeys列表,触发用户onChecked事件
-            const newCheckedKeys = tools.deepFilter(this.nodeList, (item) => item.checked).map((item) => item.propsNode.key);
-            this.$emit('onChecked', checked, node.propsNode, newCheckedKeys);
+            const checkedNodes = tools.deepFilter(this.nodeList, (item) => item.checked)
+            const _checkedKeys = checkedNodes.map((item) => item.propsNode.key);
+            this.checkedKeys = _checkedKeys
+            this.$emit('onChecked', checked, node, _checkedKeys,checkedNodes);
         });
     },
     /** 取消事件监听函数 */

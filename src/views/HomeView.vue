@@ -2,16 +2,21 @@
     <div class="home">
         <el-card>
             <div><span>基本用法</span></div>
-            <HyTree class="test-tree" :data="data" :checkedKeys="checkedKeys" @onChecked="onChecked" />
+            <HyTree class="test-tree" :data="data" :renderContent="renderContent"></HyTree>
+            <div class="node-info-text" v-show="nodeInfo">
+                <span>节点信息：</span>
+                <span>{{ nodeInfo }}</span>
+            </div>
         </el-card>
     </div>
 </template>
 
 <script>
-import HyTree from '@/components/HyTree/index.vue';
+import { Card as ElCard, Button as ElButton } from 'element-ui'
+import HyTree from '@/components/hy-tree/index.vue';
 export default {
     name: 'HomeView',
-    components: { HyTree },
+    components: { ElCard, ElButton, HyTree },
     data() {
         return {
             data: [
@@ -22,89 +27,57 @@ export default {
                         {
                             label: '二级 1-1',
                             key: '10011',
-                            children: [
-                                {
-                                    label: '三级 1-1-1',
-                                    key: '100111'
-                                }
-                            ]
+                        },
+                        {
+                            label: '二级 1-2',
+                            key: '10012',
                         }
                     ]
                 },
                 {
                     label: '一级 2',
                     key: '1002',
-                    children: [
-                        {
-                            label: '二级 2-1',
-                            key: '10021',
-                            children: [
-                                {
-                                    label: '三级 2-1-1',
-                                    key: '100211'
-                                }
-                            ]
-                        },
-                        {
-                            label: '二级 2-2',
-                            key: '10022',
-                            children: [
-                                {
-                                    label: '三级 2-2-1',
-                                    key: '100221'
-                                }
-                            ]
-                        }
-                    ]
                 },
                 {
                     label: '一级 3',
                     key: '1003',
-                    children: [
-                        {
-                            label: '二级 3-1',
-                            key: '10031',
-                            children: [
-                                {
-                                    label: '三级 3-1-1',
-                                    key: '100311'
-                                }
-                            ]
-                        },
-                        {
-                            label: '二级 3-2',
-                            key: '10032',
-                            children: [
-                                {
-                                    label: '三级 3-2-1',
-                                    key: '100321'
-                                },
-                                {
-                                    label: '三级 3-2-2',
-                                    key: '100322',
-                                    children: [{ label: '四级级 3-2-2-1', key: '1003221' }]
-                                }
-                            ]
-                        }
-                    ]
                 }
             ],
-            checkedKeys: ['1001', '100111', '100322', '1003221']
+            nodeInfo: null
         };
     },
     methods: {
-        onChecked(checked, node, checkedKeys) {
-            this.checkedKeys = checkedKeys;
+        renderContent(h, { node }) {
+            return <div class="custom-content" >
+                <span>{node.label}</span>
+                <ElButton size="mini" type="text" on-click={(e) => this.getNodeInfo(e, node)}>选中的节点</ElButton>
+            </div>
+        }, getNodeInfo(e, node) {
+            e.stopPropagation();
+            const { children, ...nodeSelf } = node.propsNode
+            this.nodeInfo = nodeSelf
         }
     }
 };
 </script>
-<style scoped>
+<style >
 .home {
-    width: 100%;
+    width: 400px;
     padding: 12px;
+
     .test-tree {
         margin-top: 40px;
+
+        .custom-content {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+
+    .node-info-text {
+        margin-top: 12px;
     }
 }
 </style>

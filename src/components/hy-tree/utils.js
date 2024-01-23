@@ -40,7 +40,6 @@ function setNodeChecked(nodePath, value) {
         const indeterminateCount = nodePath[i].children.filter((item) => item.indeterminate).length;
         nodePath[i].indeterminate = indeterminateCount > 0 || (checkedCount > 0 && checkedCount < nodePath[i].children.length);
         nodePath[i].checked = checkedCount === nodePath[i].children.length;
-        let test = 0;
     }
 }
 

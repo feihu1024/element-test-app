@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import ElementUI from 'element-ui';
+// import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 import './assets/main.less';
@@ -11,7 +11,7 @@ import store from './store';
 
 Vue.config.productionTip = false;
 
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
 
 new Vue({
     router,
