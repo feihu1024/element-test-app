@@ -26,19 +26,21 @@ export default {
     components: {
         ElCollapseTransition,
         ElCheckbox,
-        NodeContent:{render(h) {
-            const parent = this.$parent;
-            const {renderContent,_renderProxy:renderProxy,node,rootTree} = parent
-            const defaultSlot = rootTree.$scopedSlots.default
+        NodeContent: {
+            render(h) {
+                const parent = this.$parent;
+                const { renderContent, _renderProxy: renderProxy, node, rootTree } = parent
+                const defaultSlot = rootTree.$scopedSlots.default
 
-            // 优先使用renderContent渲染，其次使用默认插槽渲染，最后使用默认值渲染
-            const content = renderContent? renderContent.call(renderProxy,h,{node}):defaultSlot?.({node})||<span  class="node-content">{node.label}</span>
-            return content
-        }}
+                // 优先使用renderContent渲染，其次使用默认插槽渲染，最后使用默认值渲染
+                const content = renderContent ? renderContent.call(renderProxy, h, { node }) : defaultSlot?.({ node }) || <span class="node-content">{node.label}</span>
+                return content
+            }
+        }
     },
     props: {
         node: { nodeKey: String, expanded: Boolean, label: String, level: Number, children: Array },
-        rootTree:Object,
+        rootTree: Object,
         activeKey: String,
         renderContent: Function
     },
