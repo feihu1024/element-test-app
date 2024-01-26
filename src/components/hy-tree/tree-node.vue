@@ -1,17 +1,13 @@
 <template>
     <div class="hy-tree-node-wrapper">
-        <div :class="isActive ? 'tree-node active' : 'tree-node'" :style="`padding-left: ${node.level * 20}px;`"
-            @click="onNodeClick">
-            <span class="node-expanded-icon"><i v-if="!node.isLeafe" class="el-icon-caret-right"
-                    :style="`transform: rotate(${expanded ? 90 : 0}deg);`"></i></span>
-            <el-checkbox v-if="node.checkable" class="node-checkbox" v-model="node.checked"
-                :indeterminate="node.indeterminate" @change="onCheckedChange" />
+        <div :class="isActive ? 'tree-node active' : 'tree-node'" :style="`padding-left: ${node.level * 20}px;`" @click="onNodeClick">
+            <span class="node-expanded-icon"><i v-if="!node.isLeafe" class="el-icon-caret-right" :style="`transform: rotate(${expanded ? 90 : 0}deg);`"></i></span>
+            <el-checkbox v-if="node.enable" class="node-checkbox" v-model="node.checked" :indeterminate="node.indeterminate" @change="onCheckedChange" />
             <node-content></node-content>
         </div>
         <el-collapse-transition v-if="!node.isLeafe">
             <div v-show="expanded">
-                <tree-node v-for="node in node.children" :key="node.nodeKey" :node="node" :rootTree="rootTree"
-                    :activeKey="activeKey" :renderContent="renderContent"></tree-node>
+                <tree-node v-for="node in node.children" :key="node.nodeKey" :node="node" :rootTree="rootTree" :activeKey="activeKey" :renderContent="renderContent"></tree-node>
             </div>
         </el-collapse-transition>
     </div>
@@ -29,12 +25,12 @@ export default {
         NodeContent: {
             render(h) {
                 const parent = this.$parent;
-                const { renderContent, _renderProxy: renderProxy, node, rootTree } = parent
-                const defaultSlot = rootTree.$scopedSlots.default
+                const { renderContent, _renderProxy: renderProxy, node, rootTree } = parent;
+                const defaultSlot = rootTree.$scopedSlots.default;
 
                 // 优先使用renderContent渲染，其次使用默认插槽渲染，最后使用默认值渲染
-                const content = renderContent ? renderContent.call(renderProxy, h, { node }) : defaultSlot?.({ node }) || <span class="node-content">{node.label}</span>
-                return content
+                const content = renderContent ? renderContent.call(renderProxy, h, { node }) : defaultSlot?.({ node }) || <span class="node-content">{node.label}</span>;
+                return content;
             }
         }
     },

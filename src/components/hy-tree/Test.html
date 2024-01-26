@@ -1,0 +1,83 @@
+<!--
+ * @Author       : feihu1024 1690806685@qq.com
+ * @Date         : 2024-01-25 15:13:42
+ * @LastEditors  : feihu1024 1690806685@qq.com
+ * @LastEditTime : 2024-01-25 15:13:51
+ * @Description  : Do not Edit
+-->
+<html>
+        <head>
+                <title>寰宇众恒工时系统v1.0</title>
+        </head>
+        <body>
+                <h1 id="title">寰宇众恒工时系统v1.0</h1>
+                <input type="text" id="nameInput" placeholder="请输入姓名">
+                <input type="text" id="tasksInput" placeholder="请输入任务内容">
+                <input type="hidden" id="id">
+                <button id="startButton" onclick="start()">开始工作</button>
+                <button id="endButton" onclick="end()">停工休息</button>
+
+                <script>
+                        var nameInput = document.getElementById('nameInput');
+                        							    var tasksInput = document.getElementById('tasksInput');
+                        							    var startButton = document.getElementById('startButton');
+                        							    var endButton = document.getElementById('endButton');
+                        							    
+                        function start() {
+                        // 动态拼接参数
+                        let name = document.getElementById('nameInput').value; ;
+                        let tasks = document.getElementById('tasksInput').value;
+                        
+                        let url = `http://10.3.15.2:8888/timeSystem/add_task?name=${name}&tasks=${tasks}`;
+                        //alert(url);
+                        // 使用 fetch 发送 GET 请求
+                        fetch(url).then(response => response.text()).then(data => {
+                        console.log('请求成功:', data);
+                        document.getElementById('id').value=data;
+                        // 设置为只读
+                        nameInput.readOnly = true;
+                        tasksInput.readOnly = true;
+                        //隐藏按钮
+                        startButton.style.display = 'none';
+                        //显示按钮
+                        endButton.style.display = 'block';
+                        }).catch(error => {
+                        console.error('请求失败:', error);
+                        });
+                
+                        }
+                                function tmpEnd() {  	
+                        							let id = document.getElementById('id').value;
+                        
+                        							let url = `http://localhost:8888/timeSystem/update_task/temp?id=${id}`;
+                        							fetch(url).then(response => response.text()).then(data => {
+                        console.log('请求成功:', data);
+                        }).catch(error => {
+                        console.error('请求失败:', error);
+                        });
+                        
+                                }
+                                function end() {  
+                                	
+                                								let id = document.getElementById('id').value;
+                        
+                        							let url = `http://10.3.15.2:8888/timeSystem/update_task/end?id=${id}`;
+                        							fetch(url).then(response => response.text()).then(data => {
+                        console.log('请求成功:', data);
+                        // 取消设置为只读  
+                        								    nameInput.readOnly = false;  
+                        								    tasksInput.readOnly = false; 
+                        								    	//显示按钮							   
+                        								    startButton.style.display = 'block';  
+                        								     //隐藏按钮
+                        							    endButton.style.display = 'none'; 
+                        }).catch(error => {
+                        console.error('请求失败:', error);
+                        });
+                        
+                        
+                        
+                                }
+                </script>
+        </body>
+</html>

@@ -7,14 +7,15 @@
                 <ElButton size="mini" @click="getDataByType('file')">file类型</ElButton>
                 <ElButton size="mini" @click="getDataByType()">全部类型</ElButton>
             </div>
-            <HyTree class="test-tree" :data-source="dataSource"></HyTree>
+            <HyTree class="test-tree" :data-source="dataSource" :default-checked-keys="defaultCheckedKeys"></HyTree>
         </el-card>
     </div>
 </template>
 
 <script>
-import { Card as ElCard, Button as ElButton } from 'element-ui'
+import { Card as ElCard, Button as ElButton } from 'element-ui';
 import HyTree from '@/components/hy-tree/index.vue';
+import tools from '@/utils/tools';
 
 const treeList = [
     {
@@ -26,48 +27,53 @@ const treeList = [
                 label: '二级 1-1',
                 key: '10011',
                 type: 'folder',
+                children: [
+                    { label: '二级 1-1-1', key: '100111', type: 'file', enable: false },
+                    { label: '二级 1-1-2', key: '100112', type: 'file' }
+                ]
             },
             {
                 label: '二级 1-2',
                 key: '10012',
-                type: 'file',
+                type: 'file'
             }
         ]
     },
     {
         label: '一级 2',
         key: '1002',
-        type: 'file',
+        type: 'file'
     },
     {
         label: '一级 3',
         key: '1003',
-        type: 'file',
+        type: 'file'
     }
-]
+];
 
 // 模拟后端接口
 const getTreeListAsync = (params) => {
-    const { type } = params || {}
-    return Promise.resolve(type === undefined ? treeList : treeList.filter(item => item.type === type))
-}
+    const { type } = params || {};
+    return Promise.resolve(type === undefined ? treeList : treeList.filter((item) => item.type === type));
+};
 
 export default {
     name: 'HomeView',
     components: { ElCard, ElButton, HyTree },
     data() {
         return {
-            dataSource: treeList,
+            defaultCheckedKeys: ['1002', '10012', '100112'],
+            dataSource: treeList
         };
     },
     methods: {
         getDataByType(type) {
-            this.dataSource = () => getTreeListAsync({ type })
+            this.dataSource = () => getTreeListAsync({ type });
         }
     }
 };
 </script>
-<style >
+<style>
 .home {
     width: 100%;
     padding: 12px;

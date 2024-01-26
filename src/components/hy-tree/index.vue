@@ -1,7 +1,6 @@
 <template>
     <div :class="!!border ? 'hy-tree border' : 'hy-tree'">
-        <tree-node v-for="node in nodeList" :key="node.nodeKey" :node="node" :rootTree="rootTree" :activeKey="activeKey"
-            :renderContent="renderContent"></tree-node>
+        <tree-node v-for="node in nodeList" :key="node.nodeKey" :node="node" :rootTree="rootTree" :activeKey="activeKey" :renderContent="renderContent"></tree-node>
         <div class="empty" v-if="nodeList.length < 1">暂无数据</div>
     </div>
 </template>
@@ -12,7 +11,7 @@ import TreeNode from './tree-node.vue';
 import treeBus from './tree-bus';
 import utils from './utils';
 
-const defaultFieldNames = { label: 'label', key: 'key', checkable: 'checkable', isLeafe: 'isLeafe', children: 'children' };
+const defaultFieldNames = { label: 'label', key: 'key', enable: 'enable', isLeafe: 'isLeafe', children: 'children' };
 
 export default {
     name: 'HyTree',
@@ -30,7 +29,7 @@ export default {
             rootTree: this,
             activeKey: null,
             treeData: [],
-            checkedKeys: this.defaultCheckedKeys,
+            checkedKeys: this.defaultCheckedKeys
         };
     },
     computed: {
@@ -38,11 +37,12 @@ export default {
             return { ...defaultFieldNames, ...this.fieldNames };
         },
         getTreeData() {
-            return this.dataSource instanceof Array ? () => Promise.resolve(this.dataSource) : this.dataSource
+            return this.dataSource instanceof Array ? () => Promise.resolve(this.dataSource) : this.dataSource;
         },
         nodeList() {
             // 设置每个节点的基本属性
-            const list = tools.deepAdvance(this.treeData, (node, index, extOption) => utils.initNode(node, extOption, this.defaultExpandAll), { fieldNames: this.innerFieldNames });
+            const callback = (node, index, extOption) => utils.initNode(node, { ...extOption, fieldNames: this.innerFieldNames }, this.defaultExpandAll);
+            const list = tools.deepMap(this.treeData, callback, { fieldNames: this.innerFieldNames });
             // 设置每个节点的选中状态
             utils.initNodesChecked(list, this.checkedKeys);
             return list;
@@ -51,13 +51,13 @@ export default {
     watch: {
         // 监听数据加载函数的变化，重新加载数据
         getTreeData(_getTreeData) {
-            this.getTreeData().then(res => this.treeData = res)
+            this.getTreeData().then((res) => (this.treeData = res));
         }
     },
     /** 注册事件监听函数 */
     created() {
         // 初始加载数据
-        this.getTreeData().then(res => this.treeData = res)
+        this.getTreeData().then((res) => (this.treeData = res));
         // 监听节点点击：记录当前被点击的节点
         treeBus.$on('activeNode', (key) => {
             this.activeKey = key;
@@ -68,9 +68,9 @@ export default {
             utils.setNodeChecked(nodePath, checked);
 
             // 更新checkedKeys列表,触发用户onChecked事件
-            const checkedNodes = tools.deepFilter(this.nodeList, (item) => item.checked)
+            const checkedNodes = tools.deepFilter(this.nodeList, (item) => item.checked);
             const _checkedKeys = checkedNodes.map((item) => item.propsNode.key);
-            this.checkedKeys = _checkedKeys
+            this.checkedKeys = _checkedKeys;
             this.$emit('onChecked', checked, node, _checkedKeys, checkedNodes);
         });
     },

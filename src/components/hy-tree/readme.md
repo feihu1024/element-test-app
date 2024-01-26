@@ -2,32 +2,42 @@
 
 #### 属性
 
-| 参数             | 说明                             | 类型    | 是否必选 | 可选值 | 默认值   |
-| :--------------- | :------------------------------- | :------ | :------: | :----: | :------- |
-| dataSource             |        树组件的数据源，支持数组与Promise回调函数两种形式                  | Array \|\| () => Promise  |    否    |   —    | () => Promise.resolve([])        |
-| fieldNames       | node 节点的字段映射配置，具体看[下表](#fieldNames)  | Object  |    否    |   —    | 参见下表 |
-| defaultExpandAll | 是否默认展开全部节点                 | Boolean |    否    |   —    | false    |
-| defaultCheckedKeys      | 默认选中的节点数组 | Array   |    否    |   —    | —        |
-| border           | 是否显示边框                     | Boolean |    否    |   —    | false    |
-| renderContent           | node节点内容区自定义渲染函数                     | Function(h, { node }) |    否    |   —    | —    |
+| 参数               | 说明                                                | 类型                     | 是否必选 | 可选值 | 默认值                    |
+| :----------------- | :-------------------------------------------------- | :----------------------- | :------: | :----: | :------------------------ |
+| dataSource         | 树组件的数据源，支持数组与 Promise 回调函数两种形式 | Array \|\| () => Promise |    否    |   —    | () => Promise.resolve([]) |
+| fieldNames         | node 节点的字段映射配置，具体看[下表](#fieldNames)  | Object                   |    否    |   —    | 参见下表                  |
+| defaultExpandAll   | 是否默认展开全部节点                                | Boolean                  |    否    |   —    | false                     |
+| defaultCheckedKeys | 默认选中的节点数组                                  | Array                    |    否    |   —    | —                         |
+| border             | 是否显示边框                                        | Boolean                  |    否    |   —    | false                     |
+| renderContent      | node 节点内容区自定义渲染函数                       | Function(h, { node })    |    否    |   —    | —                         |
 
 #### 事件
 
-| 事件名称  | 说明               | 声明格式                         | 回调参数                                                                               |
-| :-------- | :----------------- | -------------------------------- | :------------------------------------------------------------------------------------- |
-| onChecked | 点击复选框时的回调 | (value, node, checkedKeys,checkedNodes) => void | value:当前选中节点的值，node:当前选中节点的对象，checkedKeys:当前所有选中节点的key数组，当前所有选中节点的对象数组 |
+| 事件名称  | 说明               | 声明格式                                        | 回调参数                                                                                                             |
+| :-------- | :----------------- | ----------------------------------------------- | :------------------------------------------------------------------------------------------------------------------- |
+| onChecked | 点击复选框时的回调 | (value, node, checkedKeys,checkedNodes) => void | value:当前选中节点的值，node:当前选中节点的对象，checkedKeys:当前所有选中节点的 key 数组，当前所有选中节点的对象数组 |
+
+#### node 节点配置说明
+
+| 参数     | 说明         | 类型    | 是否必选 | 可选值 | 默认值 |
+| :------- | :----------- | :------ | :------: | :----: | :----- |
+| label    | 展示文本     | String  |    否    |   —    | ""     |
+| enable   | 是否支持选中 | Boolean |    否    |   —    | true   |
+| isLeafe  | 是否叶子节点 | Boolean |    否    |   —    | —      |
+| expanded | 是否展开     | Boolean |    否    |   —    | false  |
+| children | 子节点       | Array   |    否    |   —    | —      |
 
 #### fieldNames 字段映射说明
 
-| 参数      | 说明                                | 类型   | 是否必选 | 可选值 | 默认值      |
-| :-------- | :---------------------------------- | :----- | :------: | :----: | :---------- |
-| label     | 展示文本                            | string |    否    |   —    | "label"     |
-| key       | node 节点的 key，在整个树中应当唯一 | string |    否    |   —    | "key"       |
-| checkable | 是否支持选中                        | string |    否    |   —    | "checkable" |
-| isLeafe   | 是否叶子节点                        | string |    否    |   —    | "isLeafe"   |
-| children  | 子节点                              | string |    否    |   —    | "children"  |
+| 参数     | 说明         | 类型   | 是否必选 | 可选值 | 默认值     |
+| :------- | :----------- | :----- | :------: | :----: | :--------- |
+| label    | 展示文本     | String |    否    |   —    | "label"    |
+| enable   | 是否支持选中 | String |    否    |   —    | "enable"   |
+| isLeafe  | 是否叶子节点 | String |    否    |   —    | "isLeafe"  |
+| expanded | 是否展开     | String |    否    |   —    | "expanded" |
+| children | 子节点       | String |    否    |   —    | "children" |
 
-##### 示例1：基本用法
+##### 示例 1：基本用法
 
 ```
 <template>
@@ -94,7 +104,8 @@ export default {
 </style>
 ```
 
-##### 示例2：异步加载数据
+##### 示例 2：异步加载数据
+
 ```
 <template>
     <div class="home">
@@ -188,7 +199,8 @@ export default {
 </style>
 ```
 
-##### 示例3：自定义渲染(插槽方式)
+##### 示例 3：自定义渲染(插槽方式)
+
 ```
 <template>
     <div class="home">
@@ -277,7 +289,8 @@ export default {
 </style>
 ```
 
-##### 示例4：自定义渲染(renderContent方式)
+##### 示例 4：自定义渲染(renderContent 方式)
+
 ```
 <template>
     <div class="home">
